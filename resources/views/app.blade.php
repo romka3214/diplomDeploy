@@ -18,7 +18,7 @@
         <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
 
     </head>
-    <body class="font-sans antialiased bg-white dark:bg-neutral-800">
+    <body class="font-sans antialiased dark bg-neutral-800">
         @inertia
     </body>
 </html>

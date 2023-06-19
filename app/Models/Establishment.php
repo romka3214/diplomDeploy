@@ -16,6 +16,7 @@ class Establishment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'address',
@@ -24,7 +25,6 @@ class Establishment extends Model
     protected $appends = [
         'average_score'
     ];
-
 
 
     /**

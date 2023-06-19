@@ -48,10 +48,13 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard/Dashboard', [
         ]);
     }
+    public function createEvent()
+    {
+//
+    }
     public function addEvent()
     {
-        return Inertia::render('Dashboard/Dashboard', [
-        ]);
+        return Inertia::render('Dashboard/EventAdd');
     }
     public function deleteEvent()
     {

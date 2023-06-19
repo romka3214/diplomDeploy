@@ -94,7 +94,7 @@ class User extends Authenticatable
      */
     public function follows(): BelongsToMany
     {
-        return $this->belongsToMany(Establishment::class, 'user_follows');
+        return $this->belongsToMany(Establishment::class, 'user_follows')->with('photos');
     }
 
 

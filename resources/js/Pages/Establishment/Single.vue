@@ -10,22 +10,52 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import {ref} from "vue";
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     establishment: {
         required: true,
     },
+    userSubscribe: {
+        required: true
+    }
 });
 
+const ratingStarsInput = ref(4);
+const ratingStarsSelect = ref({
+    1: true,
+    2: true,
+    3: true,
+    4: true,
+    5: false,
+});
+const changeratingStars = (value) => {
+    for (var key in ratingStarsSelect.value){
+        newReviewForm.rating = value;
+        if(value >= key){
+            ratingStarsSelect.value[key] = true;
+        } else{
+            ratingStarsSelect.value[key] = false;
+        }
+    }
+}
 
 const newReviewForm = useForm({
     text: '',
     id: props.establishment.id,
+    rating: 4,
 });
 
+const subscribe = () => {
+    router.put(route('establishments.subscribe',props.establishment.id), {}, {
+        preserveState: true,
+        preserveScroll: true,
+    });
+};
 const submit = () => {
     newReviewForm.post(route('establishments.review.store'), {
-        onFinish: () => newReviewForm.reset('text'),
+        onSuccess: () => newReviewForm.reset('text'),
         preserveState: true,
         preserveScroll: true,
     });
@@ -39,7 +69,8 @@ const submit = () => {
     <MainLayout>
         <h1 class="mt-5 mb-14 text-3xl font-extrabold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
             Заведение
-            {{ establishment.name }} </h1>
+            {{ establishment.name }}
+        </h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 dark:text-neutral-400 gap-3 mb-16">
             <div>
                 <swiper
@@ -81,10 +112,18 @@ const submit = () => {
                             }}</span>
                     </div>
                 </div>
-                <button
-                    class="mt-2 text-white bg-red-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">
-                    Подписаться
-                </button>
+                <div>
+                    <button v-if="!userSubscribe" @click="subscribe"
+                            class="mt-2 text-white bg-red-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">
+                        Подписаться
+                    </button>
+                    <button v-else @click="subscribe"
+                            class="mt-2 text-white bg-red-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-neutral-700 dark:hover:bg-red-600 dark:focus:ring-neutral-800">
+                        Отписаться
+                    </button>
+                </div>
+
+
             </div>
         </div>
         <h3 class="text-3xl font-bold dark:text-white">События</h3>
@@ -94,19 +133,18 @@ const submit = () => {
         </div>
 
         <h3 class="text-3xl font-bold dark:text-white mb-6">Отзывы</h3>
-<!--        <form >-->
-<!--            <div class="mb-6">-->
-<!--                <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Напишите свой отзыв!</label>-->
-<!--                <input type="text" id="large-input" v- class="block w-full p-3 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-neutral-500 focus:border-neutral-500 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-neutral-500 dark:focus:border-neutral-500">-->
-<!--            </div>-->
-<!--            <button type="submit"-->
-<!--                    class="text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">-->
-<!--                Добавить-->
-<!--            </button>-->
-<!--        </form>-->
 
         <form @submit.prevent="submit">
-            <InputLabel for="email" value="Напишите свой отзыв!" />
+            <InputLabel for="email" value="Напишите свой отзыв!"/>
+
+
+
+            <input type="hidden" name="rating" v-model="newReviewForm.rating">
+
+            <div class="flex items-center">
+                <svg :class="{'text-yellow-400' : star, 'text-gray-500': !star }"
+                    v-for="(star, index) in ratingStarsSelect" @click="changeratingStars(index)" aria-hidden="true" class="w-5 h-5 hover:text-yellow-400 hover:cursor-pointer" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+            </div>
 
             <TextInput
                 id="text"
@@ -114,17 +152,17 @@ const submit = () => {
                 class="mt-1 block w-full"
                 v-model="newReviewForm.text"
                 required
-                autofocus
+
             />
             <TextInput
                 type="hidden"
                 class="mt-1 block w-full"
                 v-model="newReviewForm.id"
                 required
-                autofocus
+
             />
 
-            <InputError class="mt-2" :message="newReviewForm.errors.text" />
+            <InputError class="mt-2" :message="newReviewForm.errors.text"/>
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': newReviewForm.processing }" :disabled="newReviewForm.processing">
                     Отправить
@@ -132,7 +170,7 @@ const submit = () => {
             </div>
         </form>
         <div v-for="review in establishment.reviews" class="mt-3">
-            <div v-if="review.published === true" class="flex-col text-neutral-400 mb-6 border-b">
+            <div v-if="review.published === 1" class="flex-col text-neutral-400 mb-6 border-b">
                 <div class="text-xl mb-2">
                     {{ review.user.name }}
                 </div>

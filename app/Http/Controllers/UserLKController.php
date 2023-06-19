@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Tag;
+use App\Models\UserTag;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,9 +18,33 @@ class UserLKController extends Controller
 {
 
     public function index(){
+        $tags = Tag::when(\Illuminate\Support\Facades\Request::input('searchTags'), function ($query) {
+            $query->where('name', 'like', '%' . \Illuminate\Support\Facades\Request::input('searchTags') . '%');
+        })->get();
         return Inertia::render('ProfileLK/Show', [
             'status' => session('status'),
+            'tags' => fn() => $tags,
+            'userTags'=> Auth::user()->tags,
         ]);
+    }
+
+    public function deleteTag($id){
+        UserTag::where('user_id', Auth::user()->id)->where('tag_id', $id)->delete();
+        return back();
+    }
+
+    public function addTags(Request $request){
+
+
+        foreach ($request->ids as $key => $id){
+            UserTag::query()->updateOrCreate(
+                ['user_id' => Auth::user()->id, 'tag_id'=> $id],
+                ['user_id'=> Auth::user()->id, 'tag_id'=> $id, 'interest_count' => 0]
+            );
+        }
+
+
+        return back();
     }
 
     /**

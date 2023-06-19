@@ -6,6 +6,7 @@ use App\Models\Establishment;
 
 use App\Models\Review;
 use App\Models\Tag;
+use App\Models\UserFollow;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -100,9 +101,24 @@ class EstablishmentController extends Controller
                 'photos'
             ]
         ])->find($id);
+        $userSubscribe = UserFollow::where('user_id', Auth::user()->id)->where('establishment_id', $id)->exists();
         return Inertia::render('Establishment/Single', [
-            'establishment' => $establishment
+            'establishment' => $establishment,
+            'userSubscribe' => $userSubscribe
         ]);
+    }
+    public function subscribe($id){
+        $current = UserFollow::where('user_id', Auth::user()->id)->where('establishment_id', $id)->first();
+        if($current){
+            $current->delete();
+        } else{
+            UserFollow::create([
+                'user_id' => Auth::user()->id,
+                'establishment_id'=> $id
+            ]);
+        }
+        return back();
+
     }
 
     /**
@@ -135,7 +151,7 @@ class EstablishmentController extends Controller
         Review::create([
             'user_id' => Auth::user()->id,
             'establishment_id' => Request::input('id'),
-            'score' => 5,
+            'score' => Request::input('rating'),
             'text' => Request::input('text'),
             'published' => true
         ]);

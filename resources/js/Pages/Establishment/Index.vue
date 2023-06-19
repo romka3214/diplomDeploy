@@ -5,9 +5,7 @@ import Card from '@/Pages/Establishment/Card.vue';
 import {ref} from "vue";
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
-// import {onMounted, ref, toRef, watch} from "vue";
-// import {Inertia} from "@inertiajs/inertia";
-// import Meilisearch from "meiliseacrh";
+
 
 defineProps({
     establishments: {
@@ -49,12 +47,7 @@ const search = () => {
         preserveScroll: true,
     });
 };
-    const dropdownSeacrhState = ref(false);
 
-    const toggleDropdownSeacrh = () =>{
-
-        dropdownSeacrhState.value = !dropdownSeacrhState.value;
-    }
 
 </script>
 
@@ -87,10 +80,10 @@ const search = () => {
             </div>
         </form>
 
-        <button @click="toggleDropdownSeacrh" id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-blue-300 dark:bg-neutral-600 dark:hover:bg-neutral-700" type="button">Выбор тегов<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+        <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-blue-300 dark:bg-neutral-600 dark:hover:bg-neutral-700" type="button">Выбор тегов<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
 
         <!-- Dropdown menu -->
-        <div :class="{ hidden: !dropdownSeacrhState }" id="dropdownSearch" class="z-10 bg-white rounded-lg shadow w-60 dark:bg-neutral-700">
+        <div id="dropdownSearch" class="hidden z-10 bg-white rounded-lg shadow w-60 dark:bg-neutral-700">
             <div class="p-3">
                 <label for="input-group-search" class="sr-only">Поиск</label>
                 <div class="relative">

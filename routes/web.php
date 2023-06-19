@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/establishments/{id}', [EstablishmentController::class, 'show'])->name('establishments.show');
 
+    Route::put('/establishments/{id}/subscribe', [EstablishmentController::class, 'subscribe'])->name('establishments.subscribe');
+
+
     Route::post('/establishments/reviewAdd', [EstablishmentController::class, 'addReview'])->name('establishments.review.store');
 
 
@@ -46,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/recommendations', [RecommendationsController::class, 'index'])->name('recommendations');
 
     Route::get('/lk', [UserLKController::class, 'index'])->name('profileLK.show');
+    Route::delete('/lk/deleteTag/{id}', [UserLKController::class, 'deleteTag'])->name('profileLK.deleteTag');
+    Route::post('/lk/addTags', [UserLKController::class, 'addTags'])->name('profileLK.addTags');
 
 });
 
@@ -57,8 +62,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/dashboard/events', [DashboardController::class, 'indexEvents'])->name('dashboard.events');
-    Route::get('/dashboard/event/{id}', [DashboardController::class, 'showEvent'])->name('dashboard.event.show');
+    Route::post('/dashboard/event/create', [DashboardController::class, 'createEvent'])->name('dashboard.event.create');
     Route::get('/dashboard/event/add', [DashboardController::class, 'addEvent'])->name('dashboard.event.add');
+    Route::get('/dashboard/event/{id}', [DashboardController::class, 'showEvent'])->name('dashboard.event.show');
+
+
     Route::get('/dashboard/event/delete/{id}', [DashboardController::class, 'deleteEvent'])->name('dashboard.event.delete');
 
 
