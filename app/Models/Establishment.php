@@ -42,7 +42,7 @@ class Establishment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\RecommendationsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserLKController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
 
 use App\Models\Establishment;
 use Illuminate\Foundation\Application;
@@ -59,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','isOwner'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/establishment/editIndex', [DashboardController::class, 'establishmentEditIndex'])->name('dashboard.establishment.editIndex');
 
@@ -107,5 +108,73 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+Route::middleware(['auth','isAdmin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+
+    Route::get('/admin/establishment/create', [AdminController::class, 'establishmentCreateIndex'])->name('admin.establishment.createIndex');
+    Route::post('/admin/establishment/create', [AdminController::class, 'establishmentCreate'])->name('admin.establishment.create');
+
+    Route::get('/admin/establishment/{id}', [AdminController::class, 'establishmentIndex'])->name('admin.establishment.index');
+
+
+
+    Route::get('/admin/establishment/{id}/editIndex', [AdminController::class, 'establishmentEditIndex'])->name('admin.establishment.editIndex');
+
+    Route::delete('/admin/establishment/delete/{id}', [AdminController::class, 'establishmentDelete'])->name('admin.establishment.delete');
+
+    Route::post('/admin/establishment/edit', [AdminController::class, 'establishmentEdit'])->name('admin.establishment.edit');
+
+    Route::delete('/admin/establishment/{estId}/tag/delete/{tagId}', [AdminController::class, 'establishmentDeleteTag'])->name('admin.establishment.deleteTag');
+    Route::post('/admin/establishment/tag/addTags', [AdminController::class, 'establishmentAddTags'])->name('admin.establishment.addTags');
+
+
+
+    Route::post('/admin/tag/create', [AdminController::class, 'createNewTag'])->name('admin.createTag');
+
+    Route::post('/admin/establishment/add/photo', [AdminController::class, 'establishmentAddPhoto'])->name('admin.establishment.addPhoto');
+    Route::delete('/admin/establishment/delete/photo/{id}', [AdminController::class, 'establishmentDeletePhoto'])->name('admin.establishment.deletePhoto');
+
+    Route::get('/admin/reviews', [AdminController::class, 'indexReviews'])->name('admin.reviews');
+
+    Route::get('/admin/review/confirm/{id}', [AdminController::class, 'confirmReview'])->name('admin.review.confirm');
+
+    Route::delete('/admin/review/delete/{id}', [AdminController::class, 'deleteReview'])->name('admin.review.delete');
+
+
+    Route::get('/admin/events', [AdminController::class, 'indexEvents'])->name('admin.events');
+
+
+    Route::get('/admin/establishment/{id}/event/create', [AdminController::class, 'createEventIndex'])->name('admin.event.create.index');
+    Route::post('/admin/event/create', [AdminController::class, 'createEvent'])->name('admin.event.create');
+
+    Route::get('/admin/event/add', [AdminController::class, 'addEvent'])->name('admin.event.add');
+
+    Route::get('/admin/event/{ids}', [AdminController::class, 'showEvent'])->name('admin.event.show');
+    Route::get('/admin/event/edit/{ids}', [AdminController::class, 'editEventIndex'])->name('admin.event.edit.index');
+    Route::post('/admin/event/edit', [AdminController::class, 'editEvent'])->name('admin.event.edit');
+
+    Route::post('/admin/event/add/photo', [AdminController::class, 'eventAddPhoto'])->name('admin.event.addPhoto');
+    Route::delete('/admin/event/delete/photo/{id}', [AdminController::class, 'eventDeletePhoto'])->name('admin.event.deletePhoto');
+
+    Route::delete('/admin/event/delete/{id}', [AdminController::class, 'deleteEvent'])->name('admin.event.delete');
+
+
+
+    Route::get('/admin/photos', [AdminController::class, 'indexPhotos'])->name('admin.photos');
+    Route::post('/admin/photos/add', [AdminController::class, 'addPhoto'])->name('admin.photo.add');
+    Route::post('/admin/photos/delete/{id}', [AdminController::class, 'addPhoto'])->name('admin.photo.delete');
+
+
+    Route::get('/admin/requests', [AdminController::class, 'indexRequests'])->name('admin.indexRequests');
+    Route::delete('/admin/request/delete/{id}', [AdminController::class, 'deleteRequests'])->name('admin.deleteRequest');
+
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 require __DIR__ . '/auth.php';
