@@ -4,22 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Establishment;
 use App\Models\EstablishmentPhoto;
+use App\Models\EstablishmentTag;
 use App\Models\Event;
 use App\Models\EventPhotos;
 use App\Models\Review;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Request;
 
 class DashboardController extends Controller
 {
 
     public function index()
     {
+        $tags = Tag::when(\Illuminate\Support\Facades\Request::input('searchTags'), function ($query) {
+            $query->where('name', 'like', '%' . \Illuminate\Support\Facades\Request::input('searchTags') . '%');
+        })->get();
+
         return Inertia::render('Dashboard/Dashboard', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
+            'establishment' => Establishment::where('user_id', Auth::user()->id)->with(['photos','tags'])->first(),
+            'tags' => fn() => $tags,
         ]);
+    }
+
+    public function establishmentDeleteTag($estId, $tagId){
+        EstablishmentTag::where('establishment_id',$estId)->where('tag_id', $tagId)->delete();
+        return back();
+    }
+
+    public function establishmentAddTags(Request $request){
+        foreach ($request->ids as $key => $id){
+            EstablishmentTag::query()->updateOrCreate(
+                ['establishment_id' => $request->estId, 'tag_id'=> $id],
+                ['establishment_id'=> $request->estId, 'tag_id'=> $id, 'popularity_count' => 0]
+            );
+        }
+        return back();
+    }
+
+    public function createNewTag(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:' . Tag::class,
+        ]);
+
+        Tag::create([
+            'name' => $request->name
+        ]);
+
+        return back();
     }
 
     public function establishmentEditIndex()
@@ -32,7 +66,7 @@ class DashboardController extends Controller
 
     }
 
-    public function establishmentEdit(\Illuminate\Http\Request $request)
+    public function establishmentEdit(Request $request)
     {
 
         $request->validate([
@@ -51,7 +85,7 @@ class DashboardController extends Controller
 
     }
 
-    public function establishmentAddPhoto(\Illuminate\Http\Request $request)
+    public function establishmentAddPhoto(Request $request)
     {
 
         $request->validate([
@@ -101,6 +135,7 @@ class DashboardController extends Controller
     {
         return Inertia::render('Dashboard/Event/Events', [
             'events' => Auth::user()->establishment->events,
+            'establishmentId' => Auth::user()->establishment->id
         ]);
     }
 
@@ -170,9 +205,37 @@ class DashboardController extends Controller
         return back();
     }
 
-    public function createEvent()
+    public function createEventIndex($id)
     {
-//
+
+        return Inertia::render('Dashboard/Event/Create', [
+            'establishmentId' => $id
+        ]);
+    }
+
+    public function createEvent(\Illuminate\Http\Request $request){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|integer',
+            'date_start' => 'required|before:date_end',
+            'date_end' => 'required|after:date_start',
+            'photo' => 'required|image|mimes:jpeg,jpg,png|max:2048'
+        ]);
+
+        $event = Event::create([
+            'establishment_id' => $request->establishmentId,
+            'name' => $request->name,
+            'description' =>$request->description,
+            'price' => $request->price,
+            'date_start' => $request->date_start,
+            'date_end' => $request->date_end
+        ]);
+        $photo = EventPhotos::create([
+            'event_id' => $event->id,
+            'url' => $request->file('photo')->store('', 'public'),
+        ]);
+        return back();
     }
 
     public function deleteEvent($id)
@@ -183,51 +246,19 @@ class DashboardController extends Controller
     }
 
 
-    public function indexPhotos()
-    {
-        return Inertia::render('Dashboard/Photos', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
-        ]);
-    }
-
-    public function addPhoto()
-    {
-        return Inertia::render('Dashboard/Photos', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
-        ]);
-    }
-
-    public function deletePhoto()
-    {
-        return Inertia::render('Dashboard/Photos', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
-        ]);
-    }
 
 
-    public function indexTags()
-    {
-        return Inertia::render('Dashboard/Tags', [
-            'establishmentTags' => Auth::user()->establishment->tags,
-            'tags' => Tag::when(Request::input('query'), function ($query) {
-                $query->where('name', 'like', '%' . Request::input('query') . '%');
-            })->get()
-        ]);
-    }
+//    public function indexTags()
+//    {
+//        return Inertia::render('Dashboard/Tags', [
+//            'establishmentTags' => Auth::user()->establishment->tags,
+//            'tags' => Tag::when(Request::input('query'), function ($query) {
+//                $query->where('name', 'like', '%' . Request::input('query') . '%');
+//            })->get()
+//        ]);
+//    }
 
-    public function addTag()
-    {
-        return Inertia::render('Dashboard/Photos', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
-        ]);
-    }
 
-    public function deleteTag()
-    {
-        return Inertia::render('Dashboard/Photos', [
-            'establishment' => Establishment::where('user_id', Auth::user()->id)->with('photos')->first(),
-        ]);
-    }
 
 
 }

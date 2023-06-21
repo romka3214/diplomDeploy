@@ -13,7 +13,7 @@ import { useForm } from '@inertiajs/vue3';
 
 
 const confirmingUserDeletion = ref(false);
-const passwordInput = ref(null);
+
 
 const form = useForm({
     name: '',

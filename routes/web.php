@@ -34,12 +34,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/establishments', [EstablishmentController::class, 'index'])->name('establishments');
 
-    Route::get('/establishments/{id}', [EstablishmentController::class, 'show'])->name('establishments.show');
+    Route::post('/establishments/reviewAdd', [EstablishmentController::class, 'addReview'])->name('establishments.review.store');
 
     Route::put('/establishments/{id}/subscribe', [EstablishmentController::class, 'subscribe'])->name('establishments.subscribe');
 
+    Route::get('/establishments/{id}', [EstablishmentController::class, 'show'])->name('establishments.show');
 
-    Route::post('/establishments/reviewAdd', [EstablishmentController::class, 'addReview'])->name('establishments.review.store');
+
+
+
+
 
 
     Route::get('/events', [EventController::class, 'index'])->name('events');
@@ -58,7 +62,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/establishment/editIndex', [DashboardController::class, 'establishmentEditIndex'])->name('dashboard.establishment.editIndex');
+
+    Route::delete('/dashboard/establishment/{estId}/tag/delete/{tagId}', [DashboardController::class, 'establishmentDeleteTag'])->name('dashboard.establishment.deleteTag');
+    Route::post('/dashboard/establishment/tag/addTags', [DashboardController::class, 'establishmentAddTags'])->name('dashboard.establishment.addTags');
+
+
     Route::post('/dashboard/establishment/edit', [DashboardController::class, 'establishmentEdit'])->name('dashboard.establishment.edit');
+    Route::post('/dashboard/tag/create', [DashboardController::class, 'createNewTag'])->name('dashboard.createTag');
 
     Route::post('/dashboard/establishment/add/photo', [DashboardController::class, 'establishmentAddPhoto'])->name('dashboard.establishment.addPhoto');
     Route::delete('/dashboard/establishment/delete/photo/{id}', [DashboardController::class, 'establishmentDeletePhoto'])->name('dashboard.establishment.deletePhoto');
@@ -68,7 +78,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/dashboard/events', [DashboardController::class, 'indexEvents'])->name('dashboard.events');
+
+
+    Route::get('/dashboard/establishment/{id}/event/create', [DashboardController::class, 'createEventIndex'])->name('dashboard.event.create.index');
     Route::post('/dashboard/event/create', [DashboardController::class, 'createEvent'])->name('dashboard.event.create');
+
     Route::get('/dashboard/event/add', [DashboardController::class, 'addEvent'])->name('dashboard.event.add');
 
     Route::get('/dashboard/event/{id}', [DashboardController::class, 'showEvent'])->name('dashboard.event.show');
@@ -85,11 +99,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/photos/add', [DashboardController::class, 'addPhoto'])->name('dashboard.photo.add');
     Route::post('/dashboard/photos/delete/{id}', [DashboardController::class, 'addPhoto'])->name('dashboard.photo.delete');
 
-    Route::get('/dashboard/tags', [DashboardController::class, 'indexTags'])->name('dashboard.tags');
-    Route::post('/dashboard/tags/add', [DashboardController::class, 'addTag'])->name('dashboard.tag.add');
-    Route::post('/dashboard/tags/delete', [DashboardController::class, 'deleteTag'])->name('dashboard.tag.delete');
-
-    Route::post('/tagsSearch', [TagController::class, 'search'])->name('tags.search');
 
 
 

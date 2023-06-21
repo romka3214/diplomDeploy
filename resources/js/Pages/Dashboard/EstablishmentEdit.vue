@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, router, useForm} from '@inertiajs/vue3';
+import {Head, router, useForm, Link} from '@inertiajs/vue3';
 import {onMounted} from 'vue'
 import {initFlowbite} from 'flowbite'
 
@@ -32,6 +32,7 @@ const submit = () =>{
         preserveScroll: true,
     })
 }
+
 </script>
 
 <template>
@@ -43,8 +44,10 @@ const submit = () =>{
         </template>
 
         <div class="py-12">
+
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <Link :href="route('dashboard')" class="inline-flex focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Назад</Link>
 
                     <form @submit.prevent="submit" class="space-y-6">
                         <div>

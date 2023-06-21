@@ -29,7 +29,9 @@ const onSlideChange = () => {
                     :speed="1000"
                     :slides-per-view="1" @swiper="onSwiper" @slideChange="onSlideChange">
                     <swiper-slide v-for="img in event.photos">
-                        <img class="object-cover" :src=img.url alt="">
+                        <div class="h-[20rem] md:h-[30rem] w-full">
+                            <img class="object-cover h-full w-full" :src="'../storage/' + img.url" alt="">
+                        </div>
                     </swiper-slide>
                 </swiper>
             </div>

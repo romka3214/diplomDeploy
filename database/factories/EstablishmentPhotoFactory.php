@@ -23,8 +23,9 @@ class EstablishmentPhotoFactory extends Factory
      */
     public function definition(): array
     {
+//        $fileName = $this->faker->image(storage_path('app/public'), fullpath:false, height:640, width: 480, word:['pub']);
         return [
-            'url' => $this->faker->imageUrl(640, 480, ['pub']),
+            'url' => $this->faker->image(dir: storage_path('app/public'), width: 640, height: 480, fullPath: false),
         ];
     }
 }
