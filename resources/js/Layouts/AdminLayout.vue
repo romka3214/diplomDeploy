@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-neutral-100 dark:bg-neutral-900">
-            <nav class="bg-white dark:bg-neutral-800 border-b border-neutral-100 dark:border-neutral-700">
+            <nav class="bg-white dark:bg-neutral-800 fixed w-full z-20 top-0 left-0 border-b border-neutral-100 dark:border-neutral-700">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -33,11 +33,6 @@ const showingNavigationDropdown = ref(false);
                                     Заведения
                                 </NavLink>
                             </div>
-<!--                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">-->
-<!--                                <NavLink :href="route('dashboard.events')" :active="route().current('dashboard.events')">-->
-<!--                                    События-->
-<!--                                </NavLink>-->
-<!--                            </div>-->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('admin.reviews')" :active="route().current('admin.reviews')">
                                     Модерация отзывов
@@ -48,16 +43,7 @@ const showingNavigationDropdown = ref(false);
                                     Заявки на добавление
                                 </NavLink>
                             </div>
-<!--                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">-->
-<!--                                <NavLink :href="route('dashboard.photos')" :active="route().current('dashboard.photos')">-->
-<!--                                    Фото-->
-<!--                                </NavLink>-->
-<!--                            </div>-->
-<!--                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">-->
-<!--                                <NavLink :href="route('dashboard.tags')" :active="route().current('dashboard.tags')">-->
-<!--                                    Теги-->
-<!--                                </NavLink>-->
-<!--                            </div>-->
+
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -137,9 +123,19 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Панель управления
-                        </ResponsiveNavLink>
+
+                            <ResponsiveNavLink :href="route('admin')" :active="route().current('admin')">
+                                Заведения
+                            </ResponsiveNavLink>
+
+                            <ResponsiveNavLink :href="route('admin.reviews')" :active="route().current('admin.reviews')">
+                                Модерация отзывов
+                            </ResponsiveNavLink>
+
+                            <ResponsiveNavLink :href="route('admin.indexRequests')" :active="route().current('admin.indexRequests')">
+                                Заявки на добавление
+                            </ResponsiveNavLink>
+
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -162,7 +158,7 @@ const showingNavigationDropdown = ref(false);
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white dark:bg-neutral-800 shadow" v-if="$slots.header">
+            <header class="bg-white dark:bg-neutral-800 shadow pt-16" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

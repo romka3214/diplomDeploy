@@ -58,13 +58,14 @@ const tagsAdd = () => {
     <Head :title="Профиль"/>
 
     <MainLayout>
-        <h1 class="flex gap-2 flex-wrap items-center mt-5 mb-14 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">Ваш профиль
+        <h1 class="flex gap-2 flex-wrap items-center mt-5 mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">Ваш профиль
             <span
                 class="text-transparent bg-clip-text bg-gradient-to-r to-red-600 from-white">{{ $page.props.auth.user.name }}</span>
-            <Link class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 transition ease-in-out duration-150" :href="route('logout')"  method="post" as="button">
-                Выйти
-            </Link>
+
         </h1>
+        <Link class="mb-10 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 transition ease-in-out duration-150" :href="route('logout')"  method="post" as="button">
+            Выйти
+        </Link>
 
 
         <div>
@@ -99,7 +100,7 @@ const tagsAdd = () => {
                         </a>
                     </div>
 
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Ваши любимые теги:</p>
+                    <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">Ваши любимые теги:</p>
                     <div v-if="userTags.length !== 0">
                         <div class="flex flex-wrap gap-2">
                         <span v-for="n in userTags"

@@ -58,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/lk/addTags', [UserLKController::class, 'addTags'])->name('profileLK.addTags');
     Route::post('/createRequest', [UserLKController::class, 'createRequest'])->name('profile.createRequest');
 
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 Route::middleware(['auth','isOwner'])->group(function () {
@@ -103,9 +107,7 @@ Route::middleware(['auth','isOwner'])->group(function () {
 
 
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 
@@ -172,9 +174,7 @@ Route::middleware(['auth','isAdmin'])->group(function () {
     Route::delete('/admin/request/delete/{id}', [AdminController::class, 'deleteRequests'])->name('admin.deleteRequest');
 
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 require __DIR__ . '/auth.php';

@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-neutral-100 dark:bg-neutral-900">
-            <nav class="bg-white dark:bg-neutral-800 border-b border-neutral-100 dark:border-neutral-700">
+            <nav class="bg-white dark:bg-neutral-800 fixed w-full z-20 top-0 left-0 border-b border-neutral-100 dark:border-neutral-700">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -132,9 +132,22 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Панель управления
-                        </ResponsiveNavLink>
+
+
+                            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                Заведение
+                            </ResponsiveNavLink>
+
+
+                            <ResponsiveNavLink :href="route('dashboard.events')" :active="route().current('dashboard.events')">
+                                События
+                            </ResponsiveNavLink>
+
+                            <ResponsiveNavLink :href="route('dashboard.reviews')" :active="route().current('dashboard.reviews')">
+                                Отзывы
+                            </ResponsiveNavLink>
+
+
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -157,7 +170,7 @@ const showingNavigationDropdown = ref(false);
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white dark:bg-neutral-800 shadow" v-if="$slots.header">
+            <header class="bg-white dark:bg-neutral-800 shadow pt-16" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>
