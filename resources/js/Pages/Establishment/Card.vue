@@ -11,7 +11,7 @@ defineProps({
 <template>
     <Link :href="route('establishments.show', establishment.id)" class="flex flex-col w-100 hover:bg-neutral-700 rounded-xl">
         <div class="w-100">
-            <img class="object-cover h-32 md:h-64 w-full rounded-xl" :src="'../storage/' + establishment.photos[0].url" alt="">
+            <img class="object-cover md:h-64 h-48 w-full rounded-xl" :src="'../storage/' + establishment.photos[0].url" alt="">
         </div>
         <div class="p-2">
             <h1 class="text-xl">{{ establishment.name }}</h1>
