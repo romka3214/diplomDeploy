@@ -18,7 +18,8 @@ class Event extends Model
         'name',
         'description',
         'date_start',
-        'date_end'
+        'date_end',
+        'price'
     ];
     protected $dates = [
         'date_start',

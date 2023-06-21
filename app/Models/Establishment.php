@@ -74,7 +74,7 @@ class Establishment extends Model
      */
     public function events(): HasMany
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class)->orderBy('date_start');;
     }
 
     /**
@@ -89,7 +89,7 @@ class Establishment extends Model
 
     public function getAverageScoreAttribute()
     {
-        return round($this->reviews->avg('score'));
+        return round($this->reviews->where('published', 1)->avg('score'));
     }
 
 }

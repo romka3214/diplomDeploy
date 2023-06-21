@@ -2,8 +2,41 @@
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import 'flowbite';
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {initFlowbite} from "flowbite";
+
+import InputError from '@/Components/InputError.vue';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+
+
+const confirmingUserDeletion = ref(false);
+const passwordInput = ref(null);
+
+const form = useForm({
+    name: '',
+    text: '',
+});
+
+const confirmUserDeletion = () => {
+    confirmingUserDeletion.value = true;
+};
+
+const addRequest = () => {
+    form.post(route('profile.createRequest'), {
+        preserveScroll: true,
+        onSuccess: () => closeModal(),
+        onFinish: () => form.reset(),
+    });
+};
+
+const closeModal = () => {
+    confirmingUserDeletion.value = false;
+    form.reset();
+};
+
 onMounted(() => {
     initFlowbite();
 })
@@ -44,48 +77,73 @@ onMounted(() => {
         </div>
     </nav>
 
-<!--    <header-->
-<!--        class="sticky top-0 z-30 h-[84px] bg-neutral-900 bg-opacity-50 backdrop-blur backdrop-filter  firefox:bg-opacity-90">-->
-<!--        <div class="container mx-auto max-w-8xl xl:px-8 h-full">-->
-<!--            <div class="flex items-center justify-between border-b border-neutral-800 h-full px-4 py-3 sm:px-6 lg:px-8 xl:px-0">-->
-<!--                <Link class="h-full" :href="route('home')">-->
-<!--                    <ApplicationLogo class="fill-current h-full text-black-500 dark:fill-white" />-->
-<!--                </Link>-->
-<!--&lt;!&ndash;                {{$page.props.auth.user.role}}&ndash;&gt;-->
-<!--&lt;!&ndash;                {{$page.props.auth.user.name}}&ndash;&gt;-->
-<!--                <div class="text-right">-->
-<!--&lt;!&ndash;                    <Link :href="route('events')"&ndash;&gt;-->
-<!--&lt;!&ndash;                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Мероприятия</Link>&ndash;&gt;-->
-<!--                    <Link :href="route('establishments')"-->
-<!--                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">-->
-<!--                        Заведения</Link>-->
-<!--                    <Link :href="route('recommendations')"-->
-<!--                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">-->
-<!--                        Рекомендации</Link>-->
-
-
-<!--                    <Link v-if="$page.props.auth.user.role === 2" :href="route('dashboard')"-->
-<!--                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">-->
-<!--                        Панель управления</Link>-->
-<!--                    <Link v-if="$page.props.auth.user.role === 0" :href="route('profileLK.show')"-->
-<!--                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">-->
-<!--                        Профиль</Link>-->
-<!--                    <Link v-if="$page.props.auth.user.role === 1" :href="route('dashboard')"-->
-<!--                          class="mx-2 font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">-->
-<!--                        Управление заведением</Link>-->
-
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </header>-->
-
-
     <div
         class="relative sm:flex sm:justify-center min-h-screen bg-white dark:bg-neutral-800 bg-center selection:bg-red-500 selection:text-white">
         <div class="container p-4">
             <slot />
         </div>
     </div>
+
+    <footer class="p-4 bg-white md:p-8 lg:p-10 dark:bg-neutral-900">
+        <div class="mx-auto max-w-screen-xl text-center">
+                <Link :href="route('home')" class="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white">
+                    <ApplicationLogo class="fill-current h-10 md:h-14 mr-3 text-black-500 dark:fill-white" />
+                </Link>
+
+            <p class="my-6 text-gray-500 dark:text-gray-400">Все события и заведения Уфы как на ладони</p>
+
+            <button @click="confirmUserDeletion" type="button" class="mb-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-neutral-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Добавить заведение</button>
+
+            <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">2023 <Link :href="route('home')" href="#" class="hover:underline">Enter.Ufa</Link></span>
+        </div>
+    </footer>
+
+    <Modal :show="confirmingUserDeletion" @close="closeModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Для добавления своего заведения на сайт заполните форму
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                Ваша заявка будет рассмотрена администрацией сайта
+            </p>
+
+            <form @submit.prevent="addRequest">
+                <div class="mt-6">
+                    <TextInput
+                        v-model="form.name"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Название заведения"
+                    />
+
+                    <InputError :message="form.errors.name" class="mt-2" />
+                </div>
+                <div class="mt-6">
+                    <TextInput
+                        v-model="form.text"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Текст заявки"
+                    />
+
+                    <InputError :message="form.errors.text" class="mt-2" />
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModal"> Отмена </SecondaryButton>
+
+                    <button
+                        class="ml-3 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 transition ease-in-out duration-150"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        type="submit"
+                    >
+                        Отправить
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </Modal>
 </template>

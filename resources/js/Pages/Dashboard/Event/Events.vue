@@ -1,19 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, router} from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
+
 defineProps({
-    reviews: {
+    events: {
         required: true,
     },
 });
-
-
-function deleteReview(id){
-    router.delete(route('dashboard.review.delete', id), {
-        preserveState: true,
-        preserveScroll: true,
-    });
-}
 </script>
 
 <template>
@@ -21,11 +15,13 @@ function deleteReview(id){
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-neutral-800 dark:text-neutral-200 leading-tight">Отзывы</h2>
+            <h2 class="font-semibold text-xl text-neutral-800 dark:text-neutral-200 leading-tight">События</h2>
         </template>
+
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <Link :href="route('dashboard.event.add')" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Создать событие</Link>
                 <div class="bg-white dark:bg-neutral-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -35,16 +31,19 @@ function deleteReview(id){
                                     ID
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Имя пользователя
+                                    Название
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Оценка
+                                    Описание
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Текст
+                                    Цена
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Дата
+                                    Дата начала
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Дата окончания
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Действия
@@ -52,25 +51,29 @@ function deleteReview(id){
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="review in reviews" class="bg-white border-b dark:bg-neutral-800 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600">
+                            <tr v-for="event in events" class="bg-white border-b dark:bg-neutral-800 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600">
 
                                 <td class="px-6 py-4">
-                                    {{ review.id }}
+                                    {{ event.id }}
                                 </td>
-                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ review.user.name }}
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ event.name }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ event.description.substring(0, 30) }}...
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ review.score }}
+                                    {{ event.price }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ review.text}}
+                                    {{ event.date_start }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ review.updated_at }}
+                                    {{ event.date_end }}
                                 </td>
                                 <td class="flex items-center px-6 py-4 space-x-3">
-                                    <a @click.prevent="deleteReview(review.id)" class="cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">Удалить</a>
+                                    <Link :href="route('dashboard.event.show', event.id)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Изменить</Link>
+                                    <Link :href="route('dashboard.event.delete', event.id)" class="font-medium text-red-600 dark:text-red-500 hover:underline">Удалить</Link>
                                 </td>
                             </tr>
                             </tbody>

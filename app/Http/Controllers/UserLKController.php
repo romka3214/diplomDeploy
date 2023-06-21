@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Tag;
+use App\Models\UserRequest;
 use App\Models\UserTag;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -43,6 +44,21 @@ class UserLKController extends Controller
             );
         }
 
+
+        return back();
+    }
+
+    public function createRequest(Request $request){
+        $request->validate([
+            'name' => ['required', 'string'],
+            'text' => ['required', 'string'],
+        ]);
+
+        UserRequest::create([
+            'name' => $request->name,
+            'text' => $request->text,
+            'user_id' => Auth::user()->id,
+        ]);
 
         return back();
     }

@@ -212,5 +212,8 @@ return [
         'updated_at'               => 'обновлено в',
         'username'                 => 'никнейм',
         'year'                     => 'год',
+        'newPhoto' => 'фото',
+        'date_start'=>'дата начала',
+        'date_end' => 'дата окончания'
     ],
 ];

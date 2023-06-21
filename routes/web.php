@@ -51,21 +51,32 @@ Route::middleware('auth')->group(function () {
     Route::get('/lk', [UserLKController::class, 'index'])->name('profileLK.show');
     Route::delete('/lk/deleteTag/{id}', [UserLKController::class, 'deleteTag'])->name('profileLK.deleteTag');
     Route::post('/lk/addTags', [UserLKController::class, 'addTags'])->name('profileLK.addTags');
+    Route::post('/createRequest', [UserLKController::class, 'createRequest'])->name('profile.createRequest');
 
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/establishment/editIndex', [DashboardController::class, 'establishmentEditIndex'])->name('dashboard.establishment.editIndex');
+    Route::post('/dashboard/establishment/edit', [DashboardController::class, 'establishmentEdit'])->name('dashboard.establishment.edit');
+
+    Route::post('/dashboard/establishment/add/photo', [DashboardController::class, 'establishmentAddPhoto'])->name('dashboard.establishment.addPhoto');
+    Route::delete('/dashboard/establishment/delete/photo/{id}', [DashboardController::class, 'establishmentDeletePhoto'])->name('dashboard.establishment.deletePhoto');
 
     Route::get('/dashboard/reviews', [DashboardController::class, 'indexReviews'])->name('dashboard.reviews');
-    Route::get('/dashboard/review/delete/{id}', [DashboardController::class, 'deleteReview'])->name('dashboard.review.delete');
+    Route::delete('/dashboard/review/delete/{id}', [DashboardController::class, 'deleteReview'])->name('dashboard.review.delete');
 
 
     Route::get('/dashboard/events', [DashboardController::class, 'indexEvents'])->name('dashboard.events');
     Route::post('/dashboard/event/create', [DashboardController::class, 'createEvent'])->name('dashboard.event.create');
     Route::get('/dashboard/event/add', [DashboardController::class, 'addEvent'])->name('dashboard.event.add');
-    Route::get('/dashboard/event/{id}', [DashboardController::class, 'showEvent'])->name('dashboard.event.show');
 
+    Route::get('/dashboard/event/{id}', [DashboardController::class, 'showEvent'])->name('dashboard.event.show');
+    Route::get('/dashboard/event/edit/{id}', [DashboardController::class, 'editEventIndex'])->name('dashboard.event.edit.index');
+    Route::post('/dashboard/event/edit', [DashboardController::class, 'editEvent'])->name('dashboard.event.edit');
+
+    Route::post('/dashboard/event/add/photo', [DashboardController::class, 'eventAddPhoto'])->name('dashboard.event.addPhoto');
+    Route::delete('/dashboard/event/delete/photo/{id}', [DashboardController::class, 'eventDeletePhoto'])->name('dashboard.event.deletePhoto');
 
     Route::get('/dashboard/event/delete/{id}', [DashboardController::class, 'deleteEvent'])->name('dashboard.event.delete');
 

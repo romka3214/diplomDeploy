@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         $new = Event::query()->
             whereDate('date_start','>', Carbon::today())->
-        orderByDesc('date_start')
+        orderBy('date_start')
             ->with(['photos'])
             ->limit(4)
             ->get();
