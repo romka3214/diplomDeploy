@@ -51,7 +51,7 @@ class AdminController extends Controller
             'establishment_id' => $establishment->id,
             'url' => $request->file('photo')->store('', 'public'),
         ]);
-        return back();
+        return to_route('admin.establishment.index', $establishment->id);
     }
 
 

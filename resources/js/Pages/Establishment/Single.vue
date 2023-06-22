@@ -128,11 +128,13 @@ const submit = () => {
 
             </div>
         </div>
-        <h3 class="text-3xl font-bold dark:text-white">События</h3>
-        <div v-if="establishment.events.length !== 0"
-             class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 dark:text-neutral-400 gap-3 mb-6">
-            <Card v-for="event in establishment.events" :event=event />
+        <div v-if="establishment.events.length !== 0">
+            <h3 class="text-3xl font-bold dark:text-white">События</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 dark:text-neutral-400 gap-3 mb-6">
+                <Card v-for="event in establishment.events" :event=event />
+            </div>
         </div>
+
 
         <h3 class="text-3xl font-bold dark:text-white mb-6">Отзывы</h3>
 
